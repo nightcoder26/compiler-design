@@ -57,22 +57,93 @@ This parts collects and stores information about source program in _symbol table
 ##### Synthesis
 This part constructs the target program from the symbol table and intermediate program from analysis. 
 
-##### Phases of a compiler
-- Lexical Analyzer
-- Syntax Analyzer
-- Semantic Analyzer
-- Intermediate Code Generator
-- Machine-Independent Code Optimizer
-- Code Generator
-- Machine-Dependent Code Optimizer
+##### **Phases of a compiler**
+character stream is read by 
+- Lexical Analyzer -> token stream
+- Syntax Analyzer -> syntax tree
+- Semantic Analyzer -> syntax tree
+- Intermediate Code Generator - intermediate representaion
+- Machine-Independent Code Optimizer - intermediate representation
+- Code Generator -> target machine code
+- Machine-Dependent Code Optimizer -> target machine code
 
 Machine independent optimization is seen in few compilers. Both optmizations are optional.
 
-#### 1.2.1 Lexical Analysis
-Lexical analysis or scanning reads the source program and groups characters into _lexemes_. For each lexeme the lexical analyser produces an output token of the form
+#### **1.2.1 Lexical Analysis**
+Lexical analysis or scanning reads the source program and groups characters into _lexemes_. For each lexeme the lexical analyser produces an output token that is passed to next phase.
 
 
 ${\langle token-name, attribute-name \rangle}$
 
+the ${token-name}$ is an abstract symbol and ${attribute-value}$ points to a symbol table entry.
+
+E.g.: position = initial + rate * 60
+
+position -> ${\langle id, 1 \rangle}$
+
+here 1 points to the sybmol table entry
+
+= -> ${\langle = \rangle}$
+
+initial -> ${\langle id, 2 \rangle}$
+
+\+ -> ${\langle + \rangle}$ 
+
+rate -> ${\langle id, 3 \rangle}$
+
+\* -> ${\langle * \rangle}$
+
+60 -> ${\langle 60 \rangle}$ 60 or number,4 where 4 points to symbol table entry
 
 
+#### **1.2.2 Syntax Analysis**
+Syntax analysis or parsing, a parser takes tokens and creates a tree that represents the grammatical structure of the token strean.
+
+In this tree each node represent an operation and the children represent arguments
+
+![alt text]({4A476021-BF55-43F8-B019-014C509AD760}.png)
+
+#### ****1.2.3 Semantic Analysis****
+Semantic analyser uses syntax tree and symbol table to check if its consistent with the language's define grammar (defined by CFGs) and also saves type info in symbol table or tree
+
+it also does type checking and reports errors. sometimes it converts or coerces types. _coersion_ (this is implicit type conversion - coersion)
+
+#### ****1.2.4 Intermediate Code Generation****
+Between source program and target code there can be multiple intermediate representations of the same code in lots of forms.
+
+after syntax and semantic analysis the compiler generates low level or machine like code which is easy to produce and easy to translate to target code.
+
+Three address code is used which is assembly-like instructions with only 3 operands per instruction. each operand in like a register 
+
+this phase outputs the three address code sequence
+
+some features of three address code instructions
+- only one operator on right side
+- only 3 operands
+- there is a temporary name to hold the computed values.
+- some have less than 3 operands, but maximum is 3
+
+#### ****1.2.5 Code Optmization****
+This phase improves the intermediate code for better result (faster/shorter/less power consuming)
+
+#### **1.2.6 Code Generation**
+This phase maps the intermediate form to the target language
+
+Registers or memory locations are selected and assigned to hold variable in a judicious way
+
+#### **1.2.7 Sybmol Table Management**
+Symbol contains a record for each variable name with fields for attributes like storage, type, scope type returned etc.
+
+Phases are grouped into _**passes**_
+
+some compilers are created to fit well with intermediate representations so that we can produce many compilers by combining different front ends with the back end.
+
+
+#### **1.2.9 Compiler Construction Tools**
+Some Specialized tools
+- Parser Generators
+- Scanner Generators
+- Syntax-directed translation engines
+- Code-generator generators
+- Data-flow analysis engines
+- Compiler Construction toolkits
